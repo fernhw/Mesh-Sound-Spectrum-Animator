@@ -223,8 +223,8 @@ public class BeatFBX:MonoBehaviour {
                 float SpectrumAreaDefinition = sphereVertexIndex * spectrumDisplay;
                 float SampleAreaDefinition = positionInSphere * SAMPLESIZE_SOUND;
 
-                // We set out projection with their multipliers through
-                // Scrolling system so they loop. if I reach 1026 we return to point 2.
+                // We set out projection with their multipliers through the
+                // scrolling system so they loop. if I reach 1026 we return to point 2.
                 int indexInSpectrumArray = Mathf.FloorToInt(SpectrumAreaDefinition + currentPatternLoation) % SAMPLESIZE_SOUND;
                 int indexInSampleArray = Mathf.FloorToInt(SampleAreaDefinition + currentPatternLoation) % SAMPLESIZE_SOUND;
 
