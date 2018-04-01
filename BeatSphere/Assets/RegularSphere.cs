@@ -223,8 +223,8 @@ public class RegularSphere:MonoBehaviour {
 
     #region Gizmo Logic:
 
-    //Orb is drawn through Gizmos when using editor, but built through
-    //Update, and start when in player.
+    // Orb is drawn through Gizmos when using editor.
+    // Orb is drawn through update when playing the game.
 #if UNITY_EDITOR
     private void OnDrawGizmos() {
         if (!Application.isPlaying) {
