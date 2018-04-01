@@ -191,8 +191,7 @@ public class BeatSphere:MonoBehaviour {
 
             // ANIMATION:
             // Spectrum animation added on top of the current shape.
-
-            // Using nested
+            // Using nested for so it has the same ammount of vertexes.
             for (ri = 0; ri < ringCount + 1; ri++) {  //ringcount +1 For more subdivs      
                 for (di = 0; di < ringDetail; di++) {
                     
@@ -203,15 +202,13 @@ public class BeatSphere:MonoBehaviour {
 					/*** Area Definitions 
 					* _________________________________________________________
 					* 
-					*   1023 Spectrums     ---> 1000000 vertexes
+					*   1024 Spectrums     ---> 1000000+ vertexes?
 					*         .       .           .       .
 					*     .  ...      ..      .  ...      ..
 					*  ...........   ....  ...........   ....
-					*.................... ...................
+					*.................... ................... 
 					*   Pattern repeats  |
 					*   itself.
-					* 
-					* _________________________________________________________
 					* 
 					*                           .
 					*                           .  ====>>>>
@@ -238,30 +235,35 @@ public class BeatSphere:MonoBehaviour {
 					* 
 					*/
 
-                    // Area definitions, spectrum and sample extended.
+					// Area definitions, spectrum and sample extended.
 					float SpectrumAreaDefinition = sphereVertexIndex * spectrumDisplay;
-                    float SampleAreaDefinition = positionInSphere * SAMPLESIZE;
+					float SampleAreaDefinition = positionInSphere * SAMPLESIZE;
 
 					// We set out projection with their multipliers through
 					// Scrolling system so they loop. if I reach 1026 we return to point 2.
 					int indexInSpectrumArray = Mathf.FloorToInt(SpectrumAreaDefinition + currentPatternLoation) % SAMPLESIZE;
 					int indexInSampleArray = Mathf.FloorToInt(SampleAreaDefinition + currentPatternLoation) % SAMPLESIZE;
 
-                    // We pick the sample and spectrums and multiply them to their modifiers.
-                    // This makes the pikes look more intense.
+					// We pick the sample and spectrums, and multiply them to their modifiers.
+					// This makes the pikes look more intense, or less intense.
 					float spectrumProjection = smoothedSpectrumArray[indexInSpectrumArray] * spectrumIntensity;
-                    float sampleProjection = smoothedSampleArray[indexInSampleArray] * sampleIntensity;
+					float sampleProjection = smoothedSampleArray[indexInSampleArray] * sampleIntensity;
 
-                    // How much to add of sample and spectrum to make it look great.
-                    // 
-                    Vector3 spectrumAdition = vertexBuffer[sphereVertexIndex] * (spectrumProjection * SPECTRUM_MOD);
-                    Vector3 sampleAdition = vertexBuffer[sphereVertexIndex] * (sampleProjection * SAMPLE_MOD);
+					// How much to add of sample and spectrum to make it look great.
+					// I'm multiplying the position in the Vector3, since it's a sphere
+                    // it has values coming from the center, so if you multiply for let's
+                    // say 2, it goes twice as further from the center.
+					Vector3 spectrumAdition = vertexBuffer[sphereVertexIndex] * (spectrumProjection * SPECTRUM_MOD);
+					Vector3 sampleAdition = vertexBuffer[sphereVertexIndex] * (sampleProjection * SAMPLE_MOD);
 
-                    // We add them.
-                    vertexBuffer[sphereVertexIndex] += spectrumAdition + sampleAdition;
+					// We add them. spectrumAdition and sampleAdition go from
+                    // (0,0,0) to the position of the vertex multiplied.
+                    // they need to be added on top of the position so the
+                    // sphere keeps it's shape.
+					vertexBuffer[sphereVertexIndex] += spectrumAdition + sampleAdition;
 
-                    //Actual linear index
-                    sphereVertexIndex++;
+                    //Actual linear index since I'm not using any index from the for.
+					sphereVertexIndex++;
                 }
             }
 
