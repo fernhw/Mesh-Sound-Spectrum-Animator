@@ -2,7 +2,7 @@
 /** 
  * Copyright (c) 2011-2017 Fernando Holguín Weber , and Studio Libeccio - All Rights Reserved
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of the ProInputSystem 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of the Beat Sphere 
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge, publish, distribute,
  * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
@@ -124,7 +124,7 @@ public class BeatSphere:MonoBehaviour {
 			float distanceSpectrumToSmoothed = spectrum - smoothedSpectrum;
 			float distanceSampleToSmoothed = sample - smoothedSample;
 
-            // We mix the delta time with an animation velocity
+            // We mix the delta time qqqqqqq‹with an animation velocity
             // KEEP IN MIND. This is NOT good for dynamic framerates and it's
             // VERY UNSTABLE but since this is an excercise I did not create a 
             // framerate dynamic animation system. You can if you want to.
