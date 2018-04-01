@@ -111,7 +111,7 @@ public class BeatSphere:MonoBehaviour {
 		listenTo.GetOutputData(sampleArray, 0);
 
         // Smoothing out the spectrum and sample projections.
-        // So we have it animated, they move to quickly.
+        // So we have it animated, they move too quickly.
 		for (int i = 0; i < SAMPLESIZE_SOUND; i++) {
             
             // Holding objects of the arrays. in readable floats
