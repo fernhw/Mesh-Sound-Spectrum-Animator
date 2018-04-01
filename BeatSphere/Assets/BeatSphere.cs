@@ -201,42 +201,42 @@ public class BeatSphere:MonoBehaviour {
 					// Te Area in which the spectrum affects the Vertex array
 
 					/*** Area Definitions 
-					 * _________________________________________________________
-					 * 
-					 *   1023 Spectrums     ---> 1000000 vertexes
-					 *         .       .           .       .
-                     *     .  ...      ..      .  ...      ..
-                     *  ...........   ....  ...........   ....
-                     *.................... ...................
-                     *   Pattern repeats  |
-                     *   itself.
-                     * 
-                     * _________________________________________________________
-                     * 
-                     *                           .
-                     *                           .  ====>>>>
-                     *   .     .  . .  . . .     .   
-                     *   .     .  . .  . . . . . .. .  . .  .
-                     *  ..     .  . .. ... . . . .. .. . .. .
-                     *.........................................
-                     *   ==================> Extends and overlaps
-                     *                       revealing more pikes and
-                     *                       creating new shapes as it
-                     *                       continously overlaps.
-                     * 
-                     * _________________________________________________________
-                     * 
-                     * 
-                     * There are 1024 floats in the sound spectrum but there
-                     * are many more vertexes, in fact in the 100s of thousands 
-                     * if you want, Area definitions allow me to spread the
-                     * spectrum and scroll it to produce fantastic looking 
-                     * effects.
-                     * 
-                     * Patterns look cooler when [spectrumDisplay] is beyond 7300
-                     * the spread evens out and pretty numeric patterns emerge.
-                     * 
-                     */
+					* _________________________________________________________
+					* 
+					*   1023 Spectrums     ---> 1000000 vertexes
+					*         .       .           .       .
+					*     .  ...      ..      .  ...      ..
+					*  ...........   ....  ...........   ....
+					*.................... ...................
+					*   Pattern repeats  |
+					*   itself.
+					* 
+					* _________________________________________________________
+					* 
+					*                           .
+					*                           .  ====>>>>
+					*   .     .  . .  . . .     .   
+					*   .     .  . .  . . . . . .. .  . .  .
+					*  ..     .  . .. ... . . . .. .. . .. .
+					*.........................................
+					*   ==================> Extends and overlaps
+					*                       revealing more pikes and
+					*                       creating new shapes as it
+					*                       continously overlaps.
+					* 
+					* _________________________________________________________
+					* 
+					* 
+					* There are 1024 floats in the sound spectrum but there
+					* are many more vertexes, in fact in the 100s of thousands 
+					* if you want, Area definitions allow me to spread the
+					* spectrum and scroll it to produce fantastic looking 
+					* effects.
+					* 
+					* Patterns look cooler when [spectrumDisplay] is beyond 7300
+					* the spread evens out and pretty numeric patterns emerge.
+					* 
+					*/
 
                     // Area definitions, spectrum and sample extended.
 					float SpectrumAreaDefinition = sphereVertexIndex * spectrumDisplay;
