@@ -35,7 +35,9 @@ public class BeatSphere:MonoBehaviour {
         SAMPLE_MOD = .1f;
 
     const int 
-        SAMPLESIZE = 1024;
+        SAMPLESIZE_SOUND = 1024;
+
+
 
     public AudioSource listenTo;
 
@@ -81,13 +83,13 @@ public class BeatSphere:MonoBehaviour {
     #region Main:
 
     void Start() {
-        spectrumArray = new float[SAMPLESIZE];
-        sampleArray = new float[SAMPLESIZE];
-        smoothedSpectrumArray = new float[SAMPLESIZE];
-        smoothedSampleArray = new float[SAMPLESIZE];
+        spectrumArray = new float[SAMPLESIZE_SOUND];
+        sampleArray = new float[SAMPLESIZE_SOUND];
+        smoothedSpectrumArray = new float[SAMPLESIZE_SOUND];
+        smoothedSampleArray = new float[SAMPLESIZE_SOUND];
 
         //Setting the first number of the spectrum and sample date for smoothing.
-        for(int i = 0; i<SAMPLESIZE; i++){
+        for(int i = 0; i<SAMPLESIZE_SOUND; i++){
             smoothedSpectrumArray[i] = 0f;
             smoothedSampleArray[i] = 0f;
         }
@@ -95,18 +97,46 @@ public class BeatSphere:MonoBehaviour {
 
     void Update() {
         //Animating the SpectrumDisplay and the Scaling number.
-        spectrumDisplay += Time.deltaTime*changeSpeed;
-        currentPatternLoation += Time.deltaTime*PatternRotationSpeed;
-
-        spectrumArray = new float[SAMPLESIZE];
-        sampleArray = new float[SAMPLESIZE];
-        listenTo.GetSpectrumData(spectrumArray, 0, FFTWindow.BlackmanHarris);
-        listenTo.GetOutputData(sampleArray, 0);
-        for (int i = 0; i<SAMPLESIZE; i++) {
-            smoothedSpectrumArray[i] = smoothedSpectrumArray[i] + (spectrumArray[i] - smoothedSpectrumArray[i])*Time.deltaTime*spectrumAnimationSmoothness;
-            smoothedSampleArray[i] = smoothedSampleArray[i] + (sampleArray[i] - smoothedSampleArray[i])*Time.deltaTime*sampleAnimationSmoothness;
-        }
+        SpectrumAnimation();
         GenerateOrb();
+    }
+
+    void SpectrumAnimation(){
+		spectrumDisplay += Time.deltaTime * changeSpeed;
+		currentPatternLoation += Time.deltaTime * PatternRotationSpeed;
+
+		spectrumArray = new float[SAMPLESIZE_SOUND];
+		sampleArray = new float[SAMPLESIZE_SOUND];
+		listenTo.GetSpectrumData(spectrumArray, 0, FFTWindow.BlackmanHarris);
+		listenTo.GetOutputData(sampleArray, 0);
+
+        // Smoothing out the spectrum and sample projections.
+        // So we have it animated, they move to quickly.
+		for (int i = 0; i < SAMPLESIZE_SOUND; i++) {
+            
+            // Holding objects of the arrays. in readable floats
+			float spectrum = spectrumArray[i];
+			float sample = sampleArray[i];
+            float smoothedSpectrum = smoothedSpectrumArray[i];
+			float smoothedSample = smoothedSampleArray[i];
+
+            // Distance between them so we can decide how quickly we move to them.
+			float distanceSpectrumToSmoothed = spectrum - smoothedSpectrum;
+			float distanceSampleToSmoothed = sample - smoothedSample;
+
+            // We mix the delta time with an animation velocity
+            // KEEP IN MIND. This is NOT good for dynamic framerates and it's
+            // VERY UNSTABLE but since this is an excercise I did not create a 
+            // framerate dynamic animation system. You can if you want to.
+            // You could also even it out and cut the animation all together.
+            // but what's the fun there.
+			float spectrumAnimationStep = Time.deltaTime * spectrumAnimationSmoothness;
+            float sampleAnimationStep = Time.deltaTime * sampleAnimationSmoothness;
+
+            // We ADD it to the current smoothed spectrum again, this is why it's unstable.
+			smoothedSpectrumArray[i] += distanceSpectrumToSmoothed * spectrumAnimationStep;
+			smoothedSampleArray[i] += distanceSampleToSmoothed * sampleAnimationStep;
+		}
     }
 
     /// <summary>
@@ -128,7 +158,7 @@ public class BeatSphere:MonoBehaviour {
         sphereMesh.vertices = GetVertexBuffer();
         sphereMesh.triangles = GetTriangleBuffer();
 
-        // Open to create UV maps someday maybe.
+        // Open to create UV maps someday. maybe.
         //sphereMesh.uv = GetUvBuffer();
 
         // Finish Mesh up.
@@ -237,12 +267,12 @@ public class BeatSphere:MonoBehaviour {
 
 					// Area definitions, spectrum and sample extended.
 					float SpectrumAreaDefinition = sphereVertexIndex * spectrumDisplay;
-					float SampleAreaDefinition = positionInSphere * SAMPLESIZE;
+					float SampleAreaDefinition = positionInSphere * SAMPLESIZE_SOUND;
 
 					// We set out projection with their multipliers through
 					// Scrolling system so they loop. if I reach 1026 we return to point 2.
-					int indexInSpectrumArray = Mathf.FloorToInt(SpectrumAreaDefinition + currentPatternLoation) % SAMPLESIZE;
-					int indexInSampleArray = Mathf.FloorToInt(SampleAreaDefinition + currentPatternLoation) % SAMPLESIZE;
+					int indexInSpectrumArray = Mathf.FloorToInt(SpectrumAreaDefinition + currentPatternLoation) % SAMPLESIZE_SOUND;
+					int indexInSampleArray = Mathf.FloorToInt(SampleAreaDefinition + currentPatternLoation) % SAMPLESIZE_SOUND;
 
 					// We pick the sample and spectrums, and multiply them to their modifiers.
 					// This makes the pikes look more intense, or less intense.
