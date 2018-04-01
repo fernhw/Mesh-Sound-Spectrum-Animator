@@ -191,13 +191,13 @@ public class RegularSphere:MonoBehaviour {
 
 	void AddQuadToVertex(int upperLeft, int upperRight, int lowerLeft, int lowerRight) {
         //face 1
-        AddVertexToPool(lowerRight);
+		AddVertexToPool(lowerRight);
         AddVertexToPool(lowerLeft);
         AddVertexToPool(upperLeft);
         //face 2
-        AddVertexToPool(upperLeft);
-        AddVertexToPool(upperRight);
+		AddVertexToPool(upperRight);
         AddVertexToPool(lowerRight);
+		AddVertexToPool(upperLeft);
     }
 
     void AddVertexToPool(int id) {
