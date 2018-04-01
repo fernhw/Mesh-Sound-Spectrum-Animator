@@ -59,21 +59,16 @@ public class BeatSphere:MonoBehaviour {
 
 	Mesh sphereMesh;
 
-	Vector3[] vertices;
-
 	float[]
 	   spectrumArray,
 	   sampleArray,
 	   smoothedSpectrumArray,
 	   smoothedSampleArray;
 
-	int[] 
-        triangleBuffer,
-		trianglesFromVertexIndexes; //to make the faces
+	int[] trianglesFromVertexIndexes; //to make the faces
 
     float
-        currentPatternLoation = 0,
-        sampleRate;
+        currentPatternLoation = 0;
 
 	int
         vertexPoolIndex = 0;
