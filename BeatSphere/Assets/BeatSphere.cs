@@ -30,7 +30,9 @@ public class BeatSphere:MonoBehaviour {
 
 	const float 
         HALF_PI = Mathf.PI * .5f,
-        PI = Mathf.PI;
+        PI = Mathf.PI,
+        SPECTRUM_MOD = 5f,
+        SAMPLE_MOD = .1f;
 
     const int 
         SAMPLESIZE = 1024;
@@ -190,12 +192,75 @@ public class BeatSphere:MonoBehaviour {
             // ANIMATION:
             // Spectrum animation added on top of the current shape.
 
+            // Using nested
             for (ri = 0; ri < ringCount + 1; ri++) {  //ringcount +1 For more subdivs      
                 for (di = 0; di < ringDetail; di++) {
+                    
                     float positionInSphere = (float)sphereVertexIndex / (float)vertexBufferSize;
-                    float spectrumProjection = smoothedSpectrumArray[Mathf.FloorToInt((float)sphereVertexIndex * spectrumDisplay + currentPatternLoation) % SAMPLESIZE] * spectrumIntensity;
-                    float sampleProjection = smoothedSampleArray[Mathf.FloorToInt(positionInSphere * SAMPLESIZE + currentPatternLoation) % SAMPLESIZE] * sampleIntensity;
-                    vertexBuffer[sphereVertexIndex] = vertexBuffer[sphereVertexIndex] + vertexBuffer[sphereVertexIndex] * (spectrumProjection * 5) + vertexBuffer[sphereVertexIndex] * (sampleProjection * .1f);
+
+					// Te Area in which the spectrum affects the Vertex array
+
+					/*** Area Definitions 
+					 * _________________________________________________________
+					 * 
+					 *   1023 Spectrums     ---> 1000000 vertexes
+					 *         .       .           .       .
+                     *     .  ...      ..      .  ...      ..
+                     *  ...........   ....  ...........   ....
+                     *.................... ...................
+                     *   Pattern repeats  |
+                     *   itself.
+                     * 
+                     * _________________________________________________________
+                     * 
+                     *                           .
+                     *                           .  ====>>>>
+                     *   .     .  . .  . . .     .   
+                     *   .     .  . .  . . . . . .. .  . .  .
+                     *  ..     .  . .. ... . . . .. .. . .. .
+                     *.........................................
+                     *   ==================> Extends and overlaps
+                     *                       revealing more pikes and
+                     *                       creating new shapes as it
+                     *                       continously overlaps.
+                     * 
+                     * _________________________________________________________
+                     * 
+                     * 
+                     * There are 1024 floats in the sound spectrum but there
+                     * are many more vertexes, in fact in the 100s of thousands 
+                     * if you want, Area definitions allow me to spread the
+                     * spectrum and scroll it to produce fantastic looking 
+                     * effects.
+                     * 
+                     * Patterns look cooler when [spectrumDisplay] is beyond 7300
+                     * the spread evens out and pretty numeric patterns emerge.
+                     * 
+                     */
+
+                    // Area definitions, spectrum and sample extended.
+					float SpectrumAreaDefinition = sphereVertexIndex * spectrumDisplay;
+                    float SampleAreaDefinition = positionInSphere * SAMPLESIZE;
+
+					// We set out projection with their multipliers through
+					// Scrolling system so they loop. if I reach 1026 we return to point 2.
+					int indexInSpectrumArray = Mathf.FloorToInt(SpectrumAreaDefinition + currentPatternLoation) % SAMPLESIZE;
+					int indexInSampleArray = Mathf.FloorToInt(SampleAreaDefinition + currentPatternLoation) % SAMPLESIZE;
+
+                    // We pick the sample and spectrums and multiply them to their modifiers.
+                    // This makes the pikes look more intense.
+					float spectrumProjection = smoothedSpectrumArray[indexInSpectrumArray] * spectrumIntensity;
+                    float sampleProjection = smoothedSampleArray[indexInSampleArray] * sampleIntensity;
+
+                    // How much to add of sample and spectrum to make it look great.
+                    // 
+                    Vector3 spectrumAdition = vertexBuffer[sphereVertexIndex] * (spectrumProjection * SPECTRUM_MOD);
+                    Vector3 sampleAdition = vertexBuffer[sphereVertexIndex] * (sampleProjection * SAMPLE_MOD);
+
+                    // We add them.
+                    vertexBuffer[sphereVertexIndex] += spectrumAdition + sampleAdition;
+
+                    //Actual linear index
                     sphereVertexIndex++;
                 }
             }
