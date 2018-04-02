@@ -1,11 +1,16 @@
 
 # What is this?
 This script contains a mesh reader, now you can turn any mesh into this insanity. 
-      https://twitter.com/Fern_hw/status/980573885388255232
+
+https://twitter.com/Fern_hw/status/980573885388255232
+      
 A dynamic sphere with similar properties.
-      https://twitter.com/Fern_hw/status/980236180766720001
+
+https://twitter.com/Fern_hw/status/980236180766720001
+      
 and a procedural sphere, which is still useful just not as impressive.
-      https://twitter.com/Fern_hw/status/980132889986850816
+
+https://twitter.com/Fern_hw/status/980132889986850816
 
 You can import any 3D Model under 65000 vertices into this script.
 Drag a mesh from an FBX and have it dance to the beat of the playing music.
