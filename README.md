@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/fernhw/Mesh-Sound-Spectrum-Animator)
+
 
 # What is this?
 This script contains a mesh reader, now you can turn any mesh into this insanity.
